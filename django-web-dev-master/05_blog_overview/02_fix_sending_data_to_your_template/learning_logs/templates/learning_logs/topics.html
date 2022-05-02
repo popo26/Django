@@ -1,0 +1,29 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+
+<h1>Topics</h1>
+
+{% for topic  in topics %}
+{% for entry in topic.entry_set.all %}
+<!-- 
+    <h3>{{ topic.text }}</h3>
+    <p>{{ entry.text|truncatechars:20 }}</p>
+    <p>{{ topic.date_added }}</p>
+    <hr> -->
+
+</div>
+<div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+  <div class="card-header">{{ topic.text }}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{ topic.date_added }}</h5>
+    <p class="card-text">{{ entry.text|truncatechars:20 }}</p>
+  </div>
+</div>
+    
+
+{% endfor %}
+{% endfor %}
+
+
+{% endblock %}

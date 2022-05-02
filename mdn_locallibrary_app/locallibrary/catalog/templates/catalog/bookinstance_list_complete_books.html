@@ -1,0 +1,49 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h1>Complete Book List</h1>
+
+{% if bookinstance_list %}
+<ul>
+    {% for bookinst in bookinstance_list %}
+    <li>
+        {% if bookinst.status == 'm' %}
+        <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title}}</a>
+        <p>-- <strong style="color: purple;">Maintenance</strong> - [{{ bookinst.id}}]</p>
+
+        {% elif bookinst.status == 'r' %}
+        <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title}}</a>
+        <p>-- <strong style="color: blue;">Reserved </strong>- [{{ bookinst.id}}]</p>
+
+        {% elif bookinst.status != 'o' %}
+        <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title}}</a>
+        <p>-- <strong>Available</strong> - [{{ bookinst.id}}]</p>
+
+        {% elif bookinst.is_overdue %}
+        <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title}}</a>
+        <p><strong style="color:red;">({{ bookinst.due_back }})</strong> [{{ bookinst.id}}] {% if user.is_staff %} - {{bookinst.borrower}}</p>
+        {% endif %}
+
+        {% elif bookinst.status == 'o' %}
+        <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title}}</a>
+        <p><strong style="color:orange;">({{ bookinst.due_back }})</strong> [{{ bookinst.id}}] {% if user.is_staff %} - {{bookinst.borrower}}</p>
+        {% endif %}
+        {% endif %}      
+
+    
+        {% if perms.catalog.can_mark_returned %} 📕 <a href="{% url 'book-update' bookinst.book.pk %}">Update</a>
+        - <a href="{% url 'book-delete' bookinst.book.pk %}">Delete</a>
+        {% endif %}
+        
+    </li>
+    <hr>
+    {% endfor %}
+    
+</ul>
+{% else %}
+<p>There are no books in this library</p>
+{% endif %}
+
+
+
+{% endblock %}
